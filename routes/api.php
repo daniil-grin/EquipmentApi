@@ -40,4 +40,8 @@ Route::post('equipments', 'App\Http\Controllers\EquipmentController@store');
 
 Route::put('equipments/{id}', 'App\Http\Controllers\EquipmentController@update');
 
-Route::delete('equipments/{id}', 'App\Http\Controllers\EquipmentController@delete');
+Route::delete('equipments/{id}', function ($id) {
+    $equipment = Equipment::find($id);
+    $equipment->delete();
+    return response($equipment, 200);
+});

@@ -14,6 +14,7 @@ class Main extends Component {
             currentEquipment: null
         }
         this.handleAddEquipment = this.handleAddEquipment.bind(this);
+        this.handleDeleteEquipment = this.handleDeleteEquipment.bind(this);
     }
 
     /*componentDidMount() is a lifecycle method
@@ -70,6 +71,28 @@ class Main extends Component {
             })
     }
 
+    handleDeleteEquipment(equipment) {
+        fetch('api/equipments/'+equipment.id, {
+            method: 'delete',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(equipment)
+        })
+            .then(response => {
+                return response.json();
+            })
+            .then(data => {
+                console.log(this.state.equipments);
+                console.log(data.id);
+                this.setState((prevState) => ({
+                    equipments: prevState.equipments.filter(equipment => equipment.id !== data.id),
+                    currentEquipment: data
+                }))
+            })
+    }
+
     render() {
 
         const mainDivStyle = {
@@ -96,7 +119,7 @@ class Main extends Component {
                     </div>
                     <div style={divStyle}>
                         <h2>Equipment:</h2>
-                        <Equipment equipment={this.state.currentEquipment}/>
+                        <Equipment equipment={this.state.currentEquipment} onDelete={this.handleDeleteEquipment}/>
                     </div>
                     <div style={divStyle}>
                         <h2>Add new equipment:</h2>
