@@ -5,12 +5,16 @@ namespace App\Http\Controllers;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Models\Equipment;
+use Illuminate\Support\Facades\DB;
 
 class EquipmentController extends Controller
 {
     public function index()
 	{
-	    return Equipment::all();
+	    return DB::table('equipment')
+            ->leftjoin('equipment_types', 'equipment.equipment_type_id', '=', 'equipment_types.id')
+            ->select('equipment.*', 'equipment_types.title')
+            ->get();
 	}
 
 	public function show(Equipment $equipment): Equipment

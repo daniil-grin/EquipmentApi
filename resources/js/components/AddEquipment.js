@@ -1,21 +1,20 @@
 import React, {Component} from 'react';
 import Equipment from "./Equipment";
+import InputMask from 'react-input-mask';
 
 class AddEquipment extends Component {
     constructor(props) {
         super(props);
-        /* Initialize the state. */
         this.state = {
             newEquipment: {
-                title: '',
-                description: '',
-                price: 0,
-                availability: 0
+                equipment_type_id: null,
+                serial_number: '',
+                note: ''
             },
+            mask: '9',
             equipmentTypes: []
         }
 
-        //Boilerplate code for binding methods with `this`
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleInput = this.handleInput.bind(this);
     }
@@ -30,33 +29,51 @@ class AddEquipment extends Component {
             });
     }
 
-    /* This method dynamically accepts inputs and stores it in the state */
     handleInput(key, e) {
-
-        /*Duplicating and updating the state */
-        var state = Object.assign({}, this.state.newEquipment);
+        let state = Object.assign({}, this.state.newEquipment);
         state[key] = e.target.value;
         this.setState({newEquipment: state});
     }
 
-    /* This method is invoked when submit button is pressed */
     handleSubmit(e) {
-        //preventDefault prevents page reload
         e.preventDefault();
-        /*A call back to the onAdd props. The control is handed over
-         *to the parent component. The current state is passed
-         *as a param
-         */
         this.props.onAdd(this.state.newEquipment);
     }
+
+    onSelectChange(key, e) {
+        let state = Object.assign({}, this.state.newEquipment);
+        state[key] = e.target.value;
+        this.setState({newEquipment: state});
+        let index = e.target.selectedIndex;
+        let optionElement = e.target.childNodes[index]
+        let option =  optionElement.getAttribute('mask');
+        let mask = '';
+        option.split('').forEach(char => {
+            switch(char) {
+                case 'N':
+                    mask += '9'
+                    break;
+                case 'A':
+                    mask += 'a'
+                    break;
+                case 'a':
+                    mask += 'a'
+                    break;
+                case 'X':
+                    mask += '*'
+                    break;
+                case 'Z':
+                    mask += '*'
+                    break;
+            }
+        });
+        this.state.mask = mask;
+    };
 
     renderEquipmentTypes() {
         return this.state.equipmentTypes.map(type => {
             return (
-                /* When using list you need to specify a key
-                 * attribute that is unique for each list item
-                */
-                <option mask={type.mask} onChange={(e) => this.handleInput('equipment_type_id', e)} value={type.id}>
+                <option key={type.id} mask={type.mask} value={type.id}>
                     {type.title}
                 </option>
             );
@@ -73,22 +90,27 @@ class AddEquipment extends Component {
                 <form onSubmit={this.handleSubmit}>
                     <label>
                         Тип оборудования:
-                        <select>
+                        <select style={inputStyle} onChange={(e) => this.onSelectChange('equipment_type_id', e)} required>
+                            <option mask='X' key='' value="">Select type</option>
                             {this.renderEquipmentTypes()}
                         </select>
-                        {/*<input style={inputStyle} type="number"*/}
-                        {/*       onChange={(e) => this.handleInput('equipment_type_id', e)}/>*/}
                     </label>
 
                     <label>
                         Серийный номер:
-                        {/*On every keystroke, the handeInput method is invoked */}
-                        <input style={inputStyle} type="text" onChange={(e) => this.handleInput('serial_number', e)}/>
+                        <InputMask
+                            required
+                            style={inputStyle}
+                            onChange={(e) => this.handleInput('serial_number', e)}
+                            mask={this.state.mask}
+                            maskChar=""
+                            ref={this.state.serial_number}
+                        />
                     </label>
 
                     <label>
                         Заметки:
-                        <input style={inputStyle} type="text" onChange={(e) => this.handleInput('note', e)}/>
+                        <textarea style={inputStyle} onChange={(e) => this.handleInput('note', e)}/>
                     </label>
                     <input style={inputStyle} type="submit" value="Submit"/>
                 </form>

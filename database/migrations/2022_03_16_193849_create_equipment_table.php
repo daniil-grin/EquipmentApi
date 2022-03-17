@@ -24,7 +24,7 @@ class CreateEquipmentTable extends Migration
             $table->bigIncrements('id');
             $table->unsignedBigInteger('equipment_type_id');
             $table->string('serial_number')->unique();
-            $table->longText('note');
+            $table->longText('note')->nullable();
             $table->foreign('equipment_type_id')->references('id')->on('equipment_types')->onDelete('cascade');
             $table->timestamps();
         });

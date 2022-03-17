@@ -9,7 +9,6 @@ class Main extends Component {
     constructor() {
 
         super();
-        //Initialize the state in the constructor
         this.state = {
             equipments: [],
             currentEquipment: null
@@ -38,9 +37,6 @@ class Main extends Component {
         }
         return this.state.equipments.map(equipment => {
             return (
-                /* When using list you need to specify a key
-                 * attribute that is unique for each list item
-                */
                 <li style={listStyle} onClick={
                     () => this.handleClick(equipment)} key={equipment.id}>
                     {equipment.serial_number}
@@ -50,16 +46,12 @@ class Main extends Component {
     }
 
     handleClick(equipment) {
-        //handleClick is used to set the state
         this.setState({currentEquipment: equipment});
     }
 
     handleAddEquipment(equipment) {
-
-        /*Fetch API for post request */
         fetch('api/equipments/', {
             method: 'post',
-            /* headers are important*/
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
@@ -76,7 +68,6 @@ class Main extends Component {
                     currentEquipment: data
                 }))
             })
-        //update the state of products and currentProduct
     }
 
     render() {
@@ -119,10 +110,6 @@ class Main extends Component {
 }
 
 export default Main;
-
-/* The if statement is required so as to Render the component
- * on pages that have a div with an ID of "root";
- */
 
 if (document.getElementById('root')) {
     ReactDOM.render(<Main/>, document.getElementById('root'));
