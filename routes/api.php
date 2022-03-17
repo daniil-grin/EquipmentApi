@@ -28,29 +28,16 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
  **Route::delete($uri, $callback);
  **
  */
-Route::get('equipment-type', function () {
+Route::get('equipment-types', function () {
     return response(EquipmentType::all(), 200);
 });
 
-Route::get('equipment', function () {
-    return response(Equipment::all(), 200);
-});
+Route::get('equipments', 'App\Http\Controllers\EquipmentController@index');
 
-Route::get('equipment/{id}', function ($id) {
-    return response(Equipment::find($id), 200);
-});
+Route::get('equipments/{id}', 'App\Http\Controllers\EquipmentController@show');
 
-Route::post('equipment', function (Request $request) {
-    return response(Equipment::create($request->all()), 200);
-});
+Route::post('equipments', 'App\Http\Controllers\EquipmentController@store');
 
-Route::put('equipment/{id}', function (Request $request, $id) {
-    $equipment = Equipment::findOrFail($id);
-    $equipment->update($request->all());
-    return response($equipment, 200);
-});
+Route::put('equipments/{id}', 'App\Http\Controllers\EquipmentController@update');
 
-Route::delete('equipment/{id}', function ($id) {
-    Equipment::find($id)->delete();
-    return 204;
-});
+Route::delete('equipments/{id}', 'App\Http\Controllers\EquipmentController@delete');
