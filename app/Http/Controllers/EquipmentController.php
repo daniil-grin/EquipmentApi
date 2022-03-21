@@ -5,16 +5,21 @@ namespace App\Http\Controllers;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Models\Equipment;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Http\Resources\Json\ResourceResponse;
 
 class EquipmentController extends Controller
 {
     public function index()
 	{
-	    return DB::table('equipment')
+        $equipments = Equipment::query()
             ->leftjoin('equipment_types', 'equipment.equipment_type_id', '=', 'equipment_types.id')
             ->select('equipment.*', 'equipment_types.title')
-            ->get();
+            ->getQuery()
+            ->paginate()
+            ->items();
+
+	    return response($equipments, 200);
 	}
 
 	public function show(Equipment $equipment): Equipment
@@ -36,11 +41,12 @@ class EquipmentController extends Controller
 	    return response()->json($equipment, 200);
 	}
 
-	public function delete(Equipment $equipment): JsonResponse
+	public function delete(Request $request): JsonResponse
     {
+        /** @var Equipment $equipment */
+        $equipment = Equipment::find($request->id);
         $equipment->delete();
-
-	    return response()->json(null, 204);
+	    return response()->json($equipment, 200);
 	}
 
 }

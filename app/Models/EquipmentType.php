@@ -10,4 +10,9 @@ class EquipmentType extends Model
     use HasFactory;
 
     protected $fillable = ['title', 'mask'];
+
+    public function getEquipments()
+    {
+        return $this->hasMany(Equipment::class);
+    }
 }

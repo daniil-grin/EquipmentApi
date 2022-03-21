@@ -20,7 +20,7 @@ class DeleteEquipment extends Component {
             <form onSubmit={this.handleSubmit}>
                 <input type="submit" value="Delete"/>
             </form>
-            )
+        )
     }
 }
 

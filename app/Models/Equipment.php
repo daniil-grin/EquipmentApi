@@ -10,4 +10,9 @@ class Equipment extends Model
     use HasFactory;
 
     protected $fillable = ['equipment_type_id', 'serial_number', 'note'];
+
+    public function getEquipmentType()
+    {
+        return $this->belongsTo(EquipmentType::class);
+    }
 }

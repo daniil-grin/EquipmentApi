@@ -9,7 +9,7 @@ class AddEquipment extends Component {
             newEquipment: {
                 equipment_type_id: null,
                 serial_number: '',
-                note: ''
+                note: '',
             },
             mask: '9',
             equipmentTypes: []
@@ -46,10 +46,10 @@ class AddEquipment extends Component {
         this.setState({newEquipment: state});
         let index = e.target.selectedIndex;
         let optionElement = e.target.childNodes[index]
-        let option =  optionElement.getAttribute('mask');
+        let option = optionElement.getAttribute('mask');
         let mask = '';
         option.split('').forEach(char => {
-            switch(char) {
+            switch (char) {
                 case 'N':
                     mask += '9'
                     break;
@@ -89,15 +89,15 @@ class AddEquipment extends Component {
             <div style={divStyle}>
                 <form onSubmit={this.handleSubmit}>
                     <label>
-                        Тип оборудования:
-                        <select style={inputStyle} onChange={(e) => this.onSelectChange('equipment_type_id', e)} required>
+                        Type:
+                        <select style={inputStyle} onChange={(e) => this.onSelectChange('equipment_type_id', e)}
+                                required>
                             <option mask='X' key='' value="">Select type</option>
                             {this.renderEquipmentTypes()}
                         </select>
                     </label>
-
                     <label>
-                        Серийный номер:
+                        Serial number:
                         <InputMask
                             required
                             style={inputStyle}
@@ -109,7 +109,7 @@ class AddEquipment extends Component {
                     </label>
 
                     <label>
-                        Заметки:
+                        Notes:
                         <textarea style={inputStyle} onChange={(e) => this.handleInput('note', e)}/>
                     </label>
                     <input style={inputStyle} type="submit" value="Submit"/>

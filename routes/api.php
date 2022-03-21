@@ -28,9 +28,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
  **Route::delete($uri, $callback);
  **
  */
-Route::get('equipment-types', function () {
-    return response(EquipmentType::all(), 200);
-});
+Route::get('equipment-types', 'App\Http\Controllers\EquipmentTypeController@index');
 
 Route::get('equipments', 'App\Http\Controllers\EquipmentController@index');
 
@@ -40,8 +38,4 @@ Route::post('equipments', 'App\Http\Controllers\EquipmentController@store');
 
 Route::put('equipments/{id}', 'App\Http\Controllers\EquipmentController@update');
 
-Route::delete('equipments/{id}', function ($id) {
-    $equipment = Equipment::find($id);
-    $equipment->delete();
-    return response($equipment, 200);
-});
+Route::delete('equipments/{id}', 'App\Http\Controllers\EquipmentController@delete');
